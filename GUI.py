@@ -216,7 +216,8 @@ class SpawnGuns(bpy.types.Panel):
         self.generateGunButtons(box,"Alternator","Gun_new")
         self.generateGunButtons(box,"Volt","Gun_new")
         self.generateGunButtons(box,"R97","Gun_new")
-
+        
+        '''
         box = layout.box()
         box.label(text="LMG's")
         self.generateGunButtons(box,"Spitfire","Gun_new")
@@ -234,3 +235,4 @@ class SpawnGuns(bpy.types.Panel):
 
         box = layout.box()
         box.label(text="Pistol's")
+        '''
