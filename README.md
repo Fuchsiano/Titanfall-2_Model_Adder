@@ -37,8 +37,11 @@ Now you only have to click on the model you want in you scene
 ## Credits 
 
 To learn how to import the models from TF2 Itself go to
+
 [This awesome web page by the Noskill community](https://noskill.gitbook.io/titanfall2/r2-ripping/model-ripping)
+
 or 
+
 [This cool Video by EyelessRook](https://youtu.be/CeO1w9Qe6MY?si=QOaywmcXoPgW1i9T)
 
 When Creating this Add-on we basically did  the same and packed the resulting files in the Model folder to be used by this add-on.
