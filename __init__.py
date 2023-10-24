@@ -54,11 +54,18 @@ def register():
     Utils.addon_core_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder-" + "_".join(map(str, bl_info["version"]))
     
     filePathforMasterVersionImport =  bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder-master"
-    
+    print()
+    print("===================================================================")
+    print(bl_info["name"])
+    print("===================================================================")
+    print()
+    print("trying to link version to dir...")
     if os.path.exists(Utils.addon_core_path):
         Utils.addon_base_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder-" + "_".join(map(str, bl_info["version"])) + "/Models/"
+        print("found link for version " + Utils.version_string)
 
     elif os.path.exists(filePathforMasterVersionImport):
+        print("found link for version 'master'")
         Utils.addon_core_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder-master" 
         Utils.addon_base_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder-master/Models/"
     
@@ -70,6 +77,9 @@ def register():
         
         if not os.path.exists(Utils.addon_core_path):
             print("Unable to find add-on dir. Cant run " + bl_info["name"])
+            print("tried dir " + Utils.addon_core_path)
+        else:
+            print("Success!")
 
     bpy.app.handlers.load_post.append(check_node_tree_on_startup)
    
