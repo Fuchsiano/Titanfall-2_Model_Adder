@@ -10,7 +10,7 @@ bl_info = {
     "category": "Add Mesh"
 }
 import bpy
-
+import os
 from . import ModelImporter, GUI, Utils, AddonSettings 
 
 RegisterClasses = [
@@ -50,6 +50,27 @@ def register():
        bpy.utils.register_class(classItem) 
     
     Utils.version_string = ".".join(map(str, bl_info["version"]))
+
+    Utils.addon_core_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder-" + "_".join(map(str, bl_info["version"]))
+    
+    filePathforMasterVersionImport =  bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder-master"
+    
+    if os.path.exists(Utils.addon_core_path):
+        Utils.addon_base_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder-" + "_".join(map(str, bl_info["version"])) + "/Models/"
+
+    elif os.path.exists(filePathforMasterVersionImport):
+        Utils.addon_core_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder-master" 
+        Utils.addon_base_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder-master/Models/"
+    
+    else:
+        #when the path isnt found it means its ether a error getting the version or the Version less master
+        print("Couldn't link dir to version.... Trying without version")
+        Utils.addon_core_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder/"
+        Utils.addon_base_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder/Models/"
+        
+        if not os.path.exists(Utils.addon_core_path):
+            print("Unable to find add-on dir. Cant run " + bl_info["name"])
+
     bpy.app.handlers.load_post.append(check_node_tree_on_startup)
    
     

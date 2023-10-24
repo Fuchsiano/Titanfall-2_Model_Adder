@@ -147,8 +147,7 @@ node_tree_name  = "S/G-Blender"
 global addon_core_path
 global addon_base_path
 
-addon_core_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder/" + version_string.replace(".", "_")
-addon_base_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder/Models/" + version_string.replace(".", "_")
+
 
 class SG_Blender_importer(bpy.types.Operator):
     bl_idname = "object.sg_blender_importer"
@@ -159,6 +158,7 @@ class SG_Blender_importer(bpy.types.Operator):
         
         global node_tree_appendet
         
+
         if node_tree_name in bpy.data.node_groups:
             print("Tree already imported :D")
             node_tree_appendet = True
