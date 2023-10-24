@@ -80,7 +80,6 @@ def register():
             print("tried dir " + Utils.addon_core_path)
         else:
             print("Success!")
-
     bpy.app.handlers.load_post.append(check_node_tree_on_startup)
    
     
