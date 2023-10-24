@@ -13,11 +13,16 @@ A Blender Addon to Import prepared Titanfall 2 Models in one click.
 - A system to bind Materials for a better performance
 
 ## Installation
-first pick a version from the release tab
+
+first download Blender if you haven't already (3.3.0 is the version this add-on was made for)
+
+[Blender 3.3](https://www.blender.org/download/releases/3-3/)
+
+then pick a version from the release tab
 
 [Titanfall 2 Model Adder version](https://github.com/Fuchsiano/Titanfall-2_Model_Adder/releases)
 
-and a blender add-on by Artfunkel
+and a Blender add-on by Artfunkel
 
 [Blender Source tool download](http://steamreview.org/BlenderSourceTools/)
 
