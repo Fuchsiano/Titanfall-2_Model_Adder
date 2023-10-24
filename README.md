@@ -14,8 +14,11 @@ A Blender Addon to Import prepared Titanfall 2 Models in one click.
 
 ## Installation
 first pick a version from the release tab
+
 [Titanfall 2 Model Adder version](https://github.com/Fuchsiano/Titanfall-2_Model_Adder/releases)
+
 and a blender add-on by Artfunkel
+
 [Blender Source tool download](http://steamreview.org/BlenderSourceTools/)
 
 after installing the two add-ons as zip (don't unpack) you need to add both of them to Blender by going to  
