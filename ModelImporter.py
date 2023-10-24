@@ -5,8 +5,7 @@ import bpy
 
 from . import Utils , AddonSettings
 
-addon_core_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall 2_Model_Adder/"
-addon_base_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall 2_Model_Adder/Models/"
+
 
 
 
@@ -220,10 +219,10 @@ def CleanForReTexturing(material):
 
 def GetTexturePath(material,model_type,model_name) -> str:
     
-    textureDir = addon_base_path + model_type + "/" + model_name + "/" + material.name.split(".")[0]
+    textureDir = Utils.addon_base_path + model_type + "/" + model_name + "/" + material.name.split(".")[0]
           
     if model_type.startswith("Gun")  and ("sight" in material.name or "scope" in material.name or "optic" in material.name or "pro_screen" in material.name or "aog" in material.name):
-        textureDir = addon_base_path + "Sights/" + material.name.split(".")[0]
+        textureDir = Utils.addon_base_path + "Sights/" + material.name.split(".")[0]
 
     return textureDir;
 
@@ -250,7 +249,7 @@ class Model_importer(bpy.types.Operator):
         
         print("Spawning "+ self.model_name +"....")
 
-        directory_to_subtype = addon_base_path  + self.model_type + "/" + self.model_name + "/" + self.model_subtype
+        directory_to_subtype = Utils.addon_base_path  + self.model_type + "/" + self.model_name + "/" + self.model_subtype
         file_type = ".qc"
         
         # Get the file path

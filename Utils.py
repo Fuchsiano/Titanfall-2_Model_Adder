@@ -135,14 +135,20 @@ class GetObjectWith(bpy.types.Operator):
 
         return {'FINISHED'}
 
+global version_string 
+version_string = ""
+
 global  node_tree_appendet
 node_tree_appendet = False 
 
 global node_tree_name
 node_tree_name  = "S/G-Blender"
 
-addon_core_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall 2_Model_Adder/"
-addon_base_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall 2_Model_Adder/Models/"
+global addon_core_path
+global addon_base_path
+
+addon_core_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder/" + version_string.replace(".", "_")
+addon_base_path = bpy.utils.user_resource('SCRIPTS') + r"/addons/Titanfall-2_Model_Adder/Models/" + version_string.replace(".", "_")
 
 class SG_Blender_importer(bpy.types.Operator):
     bl_idname = "object.sg_blender_importer"

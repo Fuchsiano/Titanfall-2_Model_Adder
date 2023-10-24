@@ -1,3 +1,4 @@
+from cgitb import text
 import bpy
 from. import ModelImporter , Utils , AddonSettings
 
@@ -29,11 +30,11 @@ class MainPanel(bpy.types.Panel):
             return
 
         
-        row = layout.row()
-        row.separator()
+
         
         row = layout.row()
-        
+        row.label(text="Version: " + Utils.version_string)
+
         tf_settings = context.scene.Titanfall_adder_settings
         
         row = layout.row()

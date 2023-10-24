@@ -49,6 +49,7 @@ def register():
     for classItem in RegisterClasses[1:]:
        bpy.utils.register_class(classItem) 
     
+    Utils.version_string = ".".join(map(str, bl_info["version"]))
     bpy.app.handlers.load_post.append(check_node_tree_on_startup)
    
     
