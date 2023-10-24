@@ -308,7 +308,11 @@ class Model_importer(bpy.types.Operator):
                     continue
 
                 if tf_settings.import_method == AddonSettings.ImportMethods.COPY_MATERIALS.name:
-                    bpy.ops.object.unlink_selected()
+                    #this gets a special method for unlicking a single material without douplicate check! 
+                    Utils.UnlinkMaterial.unlink_material(slot)
+                    
+                    materials_created_this_import.append(slot.material)
+                    
                     bpy.ops.object.visor_recolor()
 
                 elif tf_settings.import_method == AddonSettings.ImportMethods.USE_SINGLE_MATERIALS.name:
@@ -316,7 +320,7 @@ class Model_importer(bpy.types.Operator):
                     
                     bpy.ops.object.visor_recolor()
                 else:
-                    #when ImportMethods == ALWAYS_IMPORT_MATERIALS or something went wrong full import
+                    #when ImportMethods == ALWAYS_IMPORT_MATERIALS or something went wrong -> Full import
                     newMaterialCopy = material.copy()
                     materials_created_this_import.append(newMaterialCopy)
                     CleanForReTexturing(newMaterialCopy)
