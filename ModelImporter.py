@@ -344,22 +344,24 @@ class Model_ReTexture(bpy.types.Operator):
     def execute(self, context):
         model_type = ""
         model_name = ""
+        
+        print()
+        print("Starting re-import...")
 
         for obj in bpy.context.selected_objects:
             if obj.type == 'ARMATURE':
+                print("currtently re-importing " + obj.name + " ...")
                 model_type = obj.name.split("/")[0]
                 model_name = obj.name.split("/")[1]
-                break
+                for child in obj.children:
+                    for material_slot in child.material_slots:
+                        CleanForReTexturing(material_slot.material)
+                        textureDir = GetTexturePath(material_slot.material,model_type,model_name)
+                        FullTextureImport(textureDir,material_slot.material,self)
         
         if model_type == "":
             self.report({"ERROR"}, "was not able to find / get name from armature. Its was either renamed or not selected.")
             return {'CANCELLED'}
-        
-        for obj in bpy.context.selected_objects:
-            for material_slot in obj.material_slots:
-
-                CleanForReTexturing(material_slot.material)
-                textureDir = GetTexturePath(material_slot.material,model_type,model_name)
-                FullTextureImport(textureDir,material_slot.material,self)
-
+    
+        print("done!")
         return {'FINISHED'}
