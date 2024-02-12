@@ -6,9 +6,6 @@ import bpy
 from . import Utils , AddonSettings
 
 
-
-
-
 def generateColor(material, shader_node,color):
 
 
@@ -68,6 +65,10 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
         for obj in bpy.context.selected_objects:
             for coll in obj.users_collection:
                 coll.objects.unlink(obj)
+                
+                if  "Scene Collection" in coll.name:
+                    continue
+                
                 collections_to_delete_later.append(coll)
 
             coll_target.objects.link(obj)
@@ -84,7 +85,7 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
         # Rotation
         #--------------------------------------------------------
         if model_subtype == "Gun_new":
-            bone_names_to_keep = ["muzzle_flash", "Def_c_magazine", "def_c_proscreen", "ja_ads_attachment", "def_c_bolt", "def_c_sight_on", "ja_c_propGun", "weapon_bone"]
+            bone_names_to_keep = ["muzzle_flash","shell", "Def_c_magazine", "def_c_proscreen", "ja_ads_attachment", "def_c_bolt", "def_c_sight_on", "ja_c_propGun", "weapon_bone"]
             for obj in bpy.context.selected_objects:
                 if obj.type == "ARMATURE":
 
@@ -165,12 +166,11 @@ def FullTextureImport(tex_base_dir,material,self):
                         
     # Apply Textures               
     if not os.path.exists(tex_base_dir):
-        # os.path.exists("C:\Users\fuchs\AppData\Roaming\Blender Foundation\Blender\3.3\scripts/addons/Titanfall 2_Model_Adder/Models/Guns/Volt/hemlock_smg")
         print(tex_base_dir)
         print("No Mat dir. skip!")
         return {'CANCELLED'}
-                        
-    print("Dir: " + tex_base_dir)
+                       
+    print("\nDir: " + tex_base_dir)
                     
     #per file in directory
     for file_name in os.listdir(tex_base_dir):
@@ -195,7 +195,7 @@ def FullTextureImport(tex_base_dir,material,self):
             print("Was not able to add " + file_name)
             print(file_name + " is probably not named correctly")
             print("")
-            self.report({'WARNING'}, 'The model was not importet correctly')
+            self.report({'WARNING'}, 'The model was not imported correctly')
 
     if ("_b" in material.name and tf_settings.body_color) or ("_he" in material.name and tf_settings.helmet_color) or ("_j" in material.name and tf_settings.jumpkit_color):
         generateColor(material,shader_node,tf_settings.light_color)
@@ -227,6 +227,7 @@ def GetTexturePath(material,model_type,model_name) -> str:
     return textureDir;
 
 class Model_importer(bpy.types.Operator):
+    """Spawns the specified Model to the Origin Point !!!CAN FEEZE BLENDER FOR A TIME"""
     bl_idname = "wm.model_importer"
     bl_label = "spawn Pilot Models"
 
@@ -245,8 +246,9 @@ class Model_importer(bpy.types.Operator):
             self.report({"ERROR"}, "Append Node tree first")
             return {'CANCELLED'}
         else:
-             Utils.node_tree_appendet = True
+             Utils.node_tree_appended = True
         
+        print();
         print("Spawning "+ self.model_name +"....")
 
         directory_to_subtype = Utils.addon_base_path  + self.model_type + "/" + self.model_name + "/" + self.model_subtype
@@ -274,7 +276,7 @@ class Model_importer(bpy.types.Operator):
         
         materials_created_this_import = []
 
-        #Object spcae
+        #Object space
         for obj in bpy.context.selected_objects:
             
             print("")
@@ -285,14 +287,14 @@ class Model_importer(bpy.types.Operator):
             for slot in obj.material_slots:
                 material = slot.material
                 
-                is_douplicate = False
+                is_duplicate = False
                 for wasCreated in materials_created_this_import:
                     if wasCreated.name.split('.')[0] == material.name.split('.')[0]:
                         slot.material = wasCreated
-                        is_douplicate = True
+                        is_duplicate = True
                         break
 
-                if is_douplicate:
+                if is_duplicate:
                     continue
                 
                 # if Single material is not build full import
@@ -308,12 +310,11 @@ class Model_importer(bpy.types.Operator):
                     continue
 
                 if tf_settings.import_method == AddonSettings.ImportMethods.COPY_MATERIALS.name:
-                    #this gets a special method for unlicking a single material without douplicate check! 
+                    
+                    #this gets a special method for unlinking  a single material without duplicate check! 
                     Utils.UnlinkMaterial.unlink_material(slot)
                     
                     materials_created_this_import.append(slot.material)
-                    
-                    bpy.ops.object.visor_recolor()
 
                 elif tf_settings.import_method == AddonSettings.ImportMethods.USE_SINGLE_MATERIALS.name:
                     print("Using same material for new model")
@@ -330,19 +331,23 @@ class Model_importer(bpy.types.Operator):
                     FullTextureImport(textureDir,newMaterialCopy,self)
                     slot.material = newMaterialCopy
                         
-                        
-                    
+        #Recolor outside of object loop on copy so it doesn't effect the single Material which it would do inside the loop           
+        if tf_settings.import_method == AddonSettings.ImportMethods.COPY_MATERIALS.name:  
+            bpy.ops.object.visor_recolor()
+            
         print("Materials created : " + str(len(materials_created_this_import)))
-        print([m for m in materials_created_this_import])
+        #print([m for m in materials_created_this_import])
+        bpy.ops.view3d.view_selected()
         materials_created_this_import.clear()
-        
-        
+        print("Spawning "+ self.model_name +" Done!")
+        print("_________________________________________________________________")
         return {'FINISHED'}
 
 
 
 class Model_ReTexture(bpy.types.Operator):
-    bl_idname = "object.nodel_retexture"
+    """Tries to use the armature name to re-texture the selected objects"""
+    bl_idname = "object.model_retexture"
     bl_label = "spawn Pilot Models"
 
     def execute(self, context):
@@ -352,9 +357,9 @@ class Model_ReTexture(bpy.types.Operator):
         print()
         print("Starting re-import...")
 
-        for obj in bpy.context.selected_objects:
+        for obj in context.selected_objects:
             if obj.type == 'ARMATURE':
-                print("currtently re-importing " + obj.name + " ...")
+                print("currently re-importing " + obj.name + " ...")
                 model_type = obj.name.split("/")[0]
                 model_name = obj.name.split("/")[1]
                 for child in obj.children:
