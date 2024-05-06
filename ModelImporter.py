@@ -114,7 +114,10 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
                     
                     obj.location = bpy.context.scene.cursor.location
                     obj.rotation_euler = (math.radians(90.0), math.radians(0.0), math.radians(0.0))
-                    obj.scale = (0.1, 0.1, 0.1)
+                    
+                    # Scale the object to 0.01 on all axes
+                    # Used to be this scale but something broke while upgrading to the new blender version :/ 
+                    obj.scale = (0.025352, 0.025352, 0.025352)
                     bpy.ops.object.transform_apply(scale=True,rotation=True)
                     obj.name = model_type + "/" + model_name + "/" + model_subtype
                 
@@ -124,8 +127,9 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
             for obj in bpy.context.selected_objects:
                 if "skeleton" in obj.name:
                     obj.rotation_euler = (math.radians(90.0), math.radians(0.0), math.radians(0.0))
-                    # Scale the object to 0.1 on all axes
-                    obj.scale = (0.1, 0.1, 0.1)
+                    # Scale the object to 0.01 on all axes
+                    # Used to be this scale but something broke while upgrading to the new blender version :/ 
+                    obj.scale = (0.025352, 0.025352, 0.025352)
                     bpy.ops.object.transform_apply(scale=True,rotation=True)      
                     obj.name = model_type + "/" + model_name + "/" + model_subtype
         
@@ -133,8 +137,9 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
 
             if "skeleton" in obj.name:
                 obj.rotation_euler = (math.radians(90.0), math.radians(0.0), math.radians(0.0))
-                # Scale the object to 0.1 on all axes
-                obj.scale = (0.1, 0.1, 0.1)
+                # Scale the object to 0.01 on all axes
+                # Used to be this scale but something broke while upgrading to the new blender version :/ 
+                obj.scale = (0.025352, 0.025352, 0.025352)
                 bpy.ops.object.transform_apply(scale=True,rotation=True)      
                 obj.name = model_type + "/" + model_name + "/" + model_subtype
 

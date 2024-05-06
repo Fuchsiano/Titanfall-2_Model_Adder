@@ -18,6 +18,11 @@ first download Blender if you haven't already (3.3.0 is the version this add-on 
 
 [Blender 3.3](https://www.blender.org/download/releases/3-3/)
 
+or
+
+if you feel brave download the newest Blender version and see what happens [Newest Blender](https://www.blender.org/download/)
+
+
 then pick a version from the release tab
 
 [Titanfall 2 Model Adder version](https://github.com/Fuchsiano/Titanfall-2_Model_Adder/releases)

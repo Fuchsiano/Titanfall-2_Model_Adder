@@ -34,9 +34,15 @@ class MainPanel(bpy.types.Panel):
         
         row = layout.row()
         row.label(text="Version: " + Utils.version_string)
-
+        
+        row = layout.row()
+        row.label(text="Bump up version number to 0.5.2 on finishing hand operation")
         tf_settings = context.scene.Titanfall_adder_settings
         
+        row = layout.row()
+        row.operator(Utils.AddToHand.bl_idname, text="Add to hand", icon="CON_ARMATURE")
+        
+
         row = layout.row()
 
         box = layout.box()
@@ -114,7 +120,7 @@ class PerformanceSettings(bpy.types.Panel):
         
         elif tf_settings.import_method == importMethods.ALWAYS_IMPORT_MATERIALS.name:
             row = layout.row()
-            row.label(text="will alway import from the fround up")
+            row.label(text="will always import from the ground up")
             row = layout.row()
             row.label(text="slowest load time")
 
@@ -143,12 +149,12 @@ class SpawnPilots(bpy.types.Panel):
         col = layout.box().column()
         col.label(text=p_class)
         row = col.row(align=True)
-        operation = row.operator(ModelImporter.Model_importer.bl_idname, text="Spawn "+p_class+" m", icon="CONSOLE")
+        operation = row.operator(ModelImporter.Model_importer.bl_idname, text= p_class+" m", icon="CONSOLE")
         operation.model_type = "Pilots"
         operation.model_name = p_class
         operation.model_subtype = "Male"
 
-        operation = row.operator(ModelImporter.Model_importer.bl_idname, text="Spawn " + p_class + " f", icon="CONSOLE")
+        operation = row.operator(ModelImporter.Model_importer.bl_idname, text= p_class + " f", icon="CONSOLE")
         operation.model_type = "Pilots"
         operation.model_name =  p_class
         operation.model_subtype = "Female"
