@@ -223,6 +223,7 @@ class SG_Blender_importer(bpy.types.Operator):
         return {"CANCELLED"}
 
 ##############Object operation
+#seems like the imported armatures are fucked need to think of a solution
 class AddToHand(bpy.types.Operator):
     """Sets a selected Weapon as a Child of a selected Pilot.
     armature names will be used to negotiate which object is child"""

@@ -1,7 +1,7 @@
 bl_info = {
     "name": "Titanfall 2 Model Adder",
     "author": "Interstellar",
-    "version": (0, 5,1),
+    "version": (0, 5, 2),
     "blender": (3, 3, 0),
     "location": "View3 > Interstellar Library",
     "description": "Add and modify all common models from Titanfall 2",

@@ -35,12 +35,10 @@ class MainPanel(bpy.types.Panel):
         row = layout.row()
         row.label(text="Version: " + Utils.version_string)
         
-        row = layout.row()
-        row.label(text="Bump up version number to 0.5.2 on finishing hand operation")
         tf_settings = context.scene.Titanfall_adder_settings
         
         row = layout.row()
-        row.operator(Utils.AddToHand.bl_idname, text="Add to hand", icon="CON_ARMATURE")
+        #row.operator(Utils.AddToHand.bl_idname, text="Add to hand", icon="CON_ARMATURE")
         
 
         row = layout.row()
@@ -76,7 +74,7 @@ class MainPanel(bpy.types.Panel):
         row.operator(ModelImporter.Model_ReTexture.bl_idname,text="Re-import selected", icon="IMPORT")
 
         row = box.row()
-        row.operator(Utils.GetObjectWith.bl_idname,text="print Dimensipons", icon="QUESTION")
+        #row.operator(Utils.GetObjectWith.bl_idname,text="print Dimensipons", icon="QUESTION")
 
 ##########################################################################################################################
 class PerformanceSettings(bpy.types.Panel):
