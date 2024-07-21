@@ -116,8 +116,9 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
                     obj.rotation_euler = (math.radians(90.0), math.radians(0.0), math.radians(0.0))
                     
                     # Scale the object to 0.01 on all axes
+                    #TODO: tried using 0.025352 because the scaling is scuffed in newer Blender source tool version. Working on fix
                     # Used to be this scale but something broke while upgrading to the new blender version :/ 
-                    obj.scale = (0.025352, 0.025352, 0.025352)
+                    obj.scale = (0.01, 0.01, 0.01)
                     bpy.ops.object.transform_apply(scale=True,rotation=True)
                     obj.name = model_type + "/" + model_name + "/" + model_subtype
                 

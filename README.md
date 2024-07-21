@@ -14,22 +14,17 @@ A Blender Addon to Import prepared Titanfall 2 Models in one click.
 
 ## Installation
 
-first download Blender if you haven't already (3.3.0 is the version this add-on was made for)
+first download Blender if you haven't already (supported version is 3.X)
 
-[Blender 3.3](https://www.blender.org/download/releases/3-3/)
-
-or
-
-if you feel brave download the newest Blender version and see what happens [Newest Blender](https://www.blender.org/download/)
-
+[Blender 3.6](https://www.blender.org/download/releases/3-6/)
 
 then pick a version from the release tab
 
 [Titanfall 2 Model Adder version](https://github.com/Fuchsiano/Titanfall-2_Model_Adder/releases)
 
-and a Blender add-on by Artfunkel
+and a Blender add-on by Artfunkel (latest version 3.3 is currently not working but 3.2.6 works)
 
-[Blender Source tool download](http://steamreview.org/BlenderSourceTools/)
+[Blender Source tool download](http://steamreview.org/BlenderSourceTools/archives/)
 
 after installing the two add-ons as zip (don't unpack) you need to add both of them to Blender by going to  
 
@@ -41,6 +36,7 @@ and clicking the install an add-on button on the top right of the menu.
 After creating a new .blend file  open the Properties Shelf (aka n-panel) by pressing N on your keyboard and pressing  on the the Interstellar Library tab you need to Append Node tree from S/G Blender. This has to be done for every new .blend file.
 Now you only have to click on the model you want in you scene
 
+![tool showoff](./Images/Model_Adder.gif)
 
 ## Developed by
 
