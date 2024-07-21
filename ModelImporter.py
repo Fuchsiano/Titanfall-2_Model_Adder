@@ -82,8 +82,10 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
                 bpy.data.collections.remove(coll_deleting)
         
         #--------------------------------------------------------        
-        # Rotation
+        # Rotation && scale
         #--------------------------------------------------------
+        defaultScaleFactor = (0.01, 0.01, 0.01)
+        
         if model_subtype == "Gun_new":
             bone_names_to_keep = ["muzzle_flash","shell", "Def_c_magazine", "def_c_proscreen", "ja_ads_attachment", "def_c_bolt", "def_c_sight_on", "ja_c_propGun", "weapon_bone"]
             for obj in bpy.context.selected_objects:
@@ -118,7 +120,7 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
                     # Scale the object to 0.01 on all axes
                     #TODO: tried using 0.025352 because the scaling is scuffed in newer Blender source tool version. Working on fix
                     # Used to be this scale but something broke while upgrading to the new blender version :/ 
-                    obj.scale = (0.01, 0.01, 0.01)
+                    obj.scale = defaultScaleFactor
                     bpy.ops.object.transform_apply(scale=True,rotation=True)
                     obj.name = model_type + "/" + model_name + "/" + model_subtype
                 
@@ -128,9 +130,7 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
             for obj in bpy.context.selected_objects:
                 if "skeleton" in obj.name:
                     obj.rotation_euler = (math.radians(90.0), math.radians(0.0), math.radians(0.0))
-                    # Scale the object to 0.01 on all axes
-                    # Used to be this scale but something broke while upgrading to the new blender version :/ 
-                    obj.scale = (0.025352, 0.025352, 0.025352)
+                    obj.scale = defaultScaleFactor
                     bpy.ops.object.transform_apply(scale=True,rotation=True)      
                     obj.name = model_type + "/" + model_name + "/" + model_subtype
         
@@ -138,9 +138,7 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
 
             if "skeleton" in obj.name:
                 obj.rotation_euler = (math.radians(90.0), math.radians(0.0), math.radians(0.0))
-                # Scale the object to 0.01 on all axes
-                # Used to be this scale but something broke while upgrading to the new blender version :/ 
-                obj.scale = (0.025352, 0.025352, 0.025352)
+                obj.scale = defaultScaleFactor
                 bpy.ops.object.transform_apply(scale=True,rotation=True)      
                 obj.name = model_type + "/" + model_name + "/" + model_subtype
 
