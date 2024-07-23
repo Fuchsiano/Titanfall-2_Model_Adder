@@ -37,9 +37,6 @@ class MainPanel(bpy.types.Panel):
         
         tf_settings = context.scene.Titanfall_adder_settings
         
-        row = layout.row()
-        #row.operator(Utils.AddToHand.bl_idname, text="Add to hand", icon="CON_ARMATURE")
-        
 
         row = layout.row()
 
@@ -74,7 +71,18 @@ class MainPanel(bpy.types.Panel):
         row.operator(ModelImporter.Model_ReTexture.bl_idname,text="Re-import selected", icon="IMPORT")
 
         row = box.row()
-        #row.operator(Utils.GetObjectWith.bl_idname,text="print Dimensipons", icon="QUESTION")
+        row.operator(Utils.GetObjectWith.bl_idname,text="print Dimensipons", icon="QUESTION")
+
+
+        box = layout.box()
+        row = box.row()
+        box.label(text="Object Operations")
+        
+        row = box.row()
+        row.operator(Utils.AddToHand.bl_idname, text="Add to hand", icon="CON_ARMATURE")
+        
+        row = box.row()
+        row.operator(Utils.GunSetOrigin.bl_idname, text="gun set origin", icon="DECORATE_KEYFRAME")
 
 ##########################################################################################################################
 class PerformanceSettings(bpy.types.Panel):
@@ -125,6 +133,9 @@ class PerformanceSettings(bpy.types.Panel):
 
         row = layout.row()
         row.operator(Utils.DeleteUnusedMaterials.bl_idname, text="Clear unused Materials ", icon="ORPHAN_DATA")
+
+        row = layout.row()
+        row.prop(tf_settings,"weapon_Origin", text= "set new origin on import")
 
 
 ##########################################################################################################################

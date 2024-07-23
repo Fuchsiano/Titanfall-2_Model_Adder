@@ -27,6 +27,7 @@ RegisterClasses = [
     Utils.DeleteUnusedMaterials,
     Utils.GetObjectWith,
     Utils.AddToHand,
+    Utils.GunSetOrigin,
 
     GUI.MainPanel,
     GUI.SpawnPilots,

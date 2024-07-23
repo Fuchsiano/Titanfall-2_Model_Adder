@@ -1,5 +1,5 @@
 import bpy
-import mathutils
+from mathutils import Vector
 import math
 from bpy.types import Context
 
@@ -231,7 +231,13 @@ class AddToHand(bpy.types.Operator):
     bl_idname = "object.add_to_hand"
     bl_label = "Add a object to the hand of the Armature"
 
+
+
     def execute(self, context):
+            
+        magicRotation = (41,20,0)
+        magicRotation = math.radians(magicRotation[0]), math.radians(magicRotation[1]), math.radians(magicRotation[2])
+        
         gunArmature = None
         pilotArmature = None
         
@@ -247,69 +253,54 @@ class AddToHand(bpy.types.Operator):
             
             bpy.ops.object.mode_set(mode='POSE')
             # Add CHILD_OF constraint to the gunArmature
-            prop_hand_name = "ja_r_propHand" 
-            # Get the local position of the subtarget bone 
+            prop_hand_name = "ja_r_propHand"  
             prop_hand_bone = pilotArmature.pose.bones[prop_hand_name]
             
             child_of_constraint = gunArmature.constraints.new(type='CHILD_OF')
             child_of_constraint.target = pilotArmature
             child_of_constraint.subtarget = prop_hand_name
             
-            
-            #Bone Rotation is Fucked need to make my own rotation
-            wrist_name = "def_r_wrist"
-
-            # Get the bone objects
-            wrist_bone = pilotArmature.pose.bones[wrist_name]
-
-
-            weapon_bone_name = "weapon_bone" 
-            weapon_bone = gunArmature.pose.bones[weapon_bone_name]
-            
-
-            # Get the rotation difference between the pilot bone and the gun bone
-            pilot_bone_rotation = wrist_bone.matrix.to_quaternion()
-            gun_bone_rotation = weapon_bone.matrix.to_quaternion()
-
-            rotation_difference = pilot_bone_rotation.rotation_difference(gun_bone_rotation)
-
-            # Convert the rotation difference to Euler angles
-            rotation_difference_euler = rotation_difference.to_euler()
-
-            # Convert the rotation difference to Euler angles
-            rotation_difference_euler = rotation_difference.to_euler()
-
-            # Decompose the current Euler rotation of the gunArmature
-            current_rotation_euler = gunArmature.rotation_euler
-
-            # Add the corresponding angles from the rotation_difference_euler
-            new_rotation_euler = [current_angle + diff_angle for current_angle, diff_angle in zip(current_rotation_euler, rotation_difference_euler)]
-
-            # Set the rotation_euler of the gunArmature with the updated Euler angles
-            gunArmature.rotation_euler = new_rotation_euler
+            gunArmature.rotation_mode = 'XYZ'
+            gunArmature.rotation_euler = magicRotation
 
             print(pilotArmature.rotation_mode);
 
             pilot_bone_world_pos = pilotArmature.matrix_world @ prop_hand_bone.matrix.translation
+            
 
-            # Get the world space position of the gun bone
-            gun_bone_world_pos = gunArmature.matrix_world @ weapon_bone.matrix.translation
-
-            # Calculate the offset between the pilot bone and the gun bone
-            offset = pilot_bone_world_pos - gun_bone_world_pos
-
-            # Apply the offset to the gun armature
-            gunArmature.location += offset
+            gunArmature.location = pilot_bone_world_pos
 
             bpy.ops.object.mode_set(mode='OBJECT')
 
             # Update the scene to see the changes
             bpy.context.view_layer.update()
 
-            print("Object added to the hand successfully.")
         else:
             self.report({"ERROR"}, "was not able to find / get armatures.They were either renamed or not selected.")
             return {'CANCELLED'}
 
+        return {'FINISHED'}
+
+class GunSetOrigin(bpy.types.Operator):
+    """set the new Origin to the gun's grip"""
+    
+    bl_idname = "object.gun_set_origin"
+    bl_label = "set the new Origin to the gun's grip"
+
+
+
+    def execute(self, context):
+
+        for obj in context.selected_objects:
+            if obj.type != "ARMATURE" and not "Guns" in obj.name: 
+                continue
+
+            cursor = bpy.context.scene.cursor
+            origin_backup = cursor.location.copy()
+            cursor.location = obj.matrix_world @ obj.pose.bones["weapon_bone"].head
+            bpy.ops.object.origin_set(type='ORIGIN_CURSOR')
+            cursor.location = origin_backup
+            obj.location = origin_backup                
+        
         return {'FINISHED'}
         

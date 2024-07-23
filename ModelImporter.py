@@ -39,6 +39,9 @@ def generateColor(material, shader_node,color):
     print("Changed Color on: " + material.name)
 
 def CleanModelAfterImport(model_type,model_name,model_subtype):
+        
+        tf_settings = bpy.context.scene.Titanfall_adder_settings
+
         #--------------------------------------------------------        
         # Collections
         #--------------------------------------------------------
@@ -124,7 +127,11 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
                     bpy.ops.object.transform_apply(scale=True,rotation=True)
                     obj.name = model_type + "/" + model_name + "/" + model_subtype
                 
-                bpy.ops.object.origin_set(type="ORIGIN_GEOMETRY")
+                    if tf_settings.weapon_Origin: 
+                        bpy.ops.object.gun_set_origin()
+
+                if not tf_settings.weapon_Origin:     
+                    bpy.ops.object.origin_set(type="ORIGIN_GEOMETRY")
 
         elif model_subtype == "Gun_old":
             for obj in bpy.context.selected_objects:
@@ -133,6 +140,9 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
                     obj.scale = defaultScaleFactor
                     bpy.ops.object.transform_apply(scale=True,rotation=True)      
                     obj.name = model_type + "/" + model_name + "/" + model_subtype
+
+            if tf_settings.weapon_Origin: 
+                bpy.ops.object.gun_set_origin()
         
         for obj in bpy.context.selected_objects:
 
