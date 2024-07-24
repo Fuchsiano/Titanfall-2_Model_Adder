@@ -1,5 +1,5 @@
 import bpy
-from mathutils import Vector
+from mathutils import Euler
 import math
 from bpy.types import Context
 
@@ -235,8 +235,8 @@ class AddToHand(bpy.types.Operator):
 
     def execute(self, context):
             
-        magicRotation = (41,20,0)
-        magicRotation = math.radians(magicRotation[0]), math.radians(magicRotation[1]), math.radians(magicRotation[2])
+
+        magicRotation = Euler((math.radians(41), math.radians(20), math.radians(0)), 'XYZ')
         
         gunArmature = None
         pilotArmature = None
@@ -261,9 +261,11 @@ class AddToHand(bpy.types.Operator):
             child_of_constraint.subtarget = prop_hand_name
             
             gunArmature.rotation_mode = 'XYZ'
-            gunArmature.rotation_euler = magicRotation
-
-            print(pilotArmature.rotation_mode);
+            gunArmature.rotation_euler = pilotArmature.rotation_euler
+            
+            gunArmature.rotation_euler.x += magicRotation.x
+            gunArmature.rotation_euler.y += magicRotation.y
+            gunArmature.rotation_euler.z += magicRotation.z
 
             pilot_bone_world_pos = pilotArmature.matrix_world @ prop_hand_bone.matrix.translation
             
