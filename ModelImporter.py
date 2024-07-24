@@ -231,7 +231,7 @@ def FullTextureImport(tex_base_dir,material,self):
             print(file_name + " is probably not named correctly")
             print("")
             self.report({'WARNING'}, 'The model was not imported correctly')
-
+    print()
     if ("_b" in material.name and tf_settings.body_color) or ("_he" in material.name and tf_settings.helmet_color) or ("_j" in material.name and tf_settings.jumpkit_color):
         generateColor(material,shader_node,tf_settings.light_color)
                       
@@ -255,9 +255,12 @@ def CleanForReTexturing(material):
 def GetTexturePath(material,model_type,model_name) -> str:
     
     textureDir = Utils.addon_base_path + model_type + "/" + model_name + "/" + material.name.split(".")[0]
-          
-    if model_type.startswith("Gun")  and ("sight" in material.name or "scope" in material.name or "optic" in material.name or "pro_screen" in material.name or "aog" in material.name):
+    
+    if not os.path.exists(textureDir):
         textureDir = Utils.addon_base_path + "Sights/" + material.name.split(".")[0]
+    
+    if not os.path.exists(textureDir):
+        textureDir = Utils.addon_base_path + model_type + "/" + model_name + "/" + material.name.split(".")[0]
 
     return textureDir;
 
@@ -352,7 +355,7 @@ class Model_importer(bpy.types.Operator):
                     materials_created_this_import.append(slot.material)
 
                 elif tf_settings.import_method == AddonSettings.ImportMethods.USE_SINGLE_MATERIALS.name:
-                    print("Using same material for new model")
+                    print("\n Using same material for new model")
                     
                     bpy.ops.object.visor_recolor()
                 else:
