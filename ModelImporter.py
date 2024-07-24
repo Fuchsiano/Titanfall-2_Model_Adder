@@ -4,7 +4,7 @@ import re
 import bpy
 
 from . import Utils , AddonSettings
-
+from mathutils import Vector
 
 def generateColor(material, shader_node,color):
 
@@ -14,7 +14,8 @@ def generateColor(material, shader_node,color):
 
     rgb_node = nodes.new(type='ShaderNodeRGB')
     rgb_node.outputs[0].default_value = color
-
+    rgb_node.hide = True
+    rgb_node.location = texture_pos_dict.get("RGB", Vector((0,0)))
 
     material.node_tree.links.new(rgb_node.outputs[0], shader_node.inputs["Blank Emission Color"])
 
@@ -27,9 +28,14 @@ def generateColor(material, shader_node,color):
         return {'CANCELLED'}
 
 
+    image_node.location = texture_pos_dict.get("Blank_Emission", Vector((0,0)))
+    image_node.hide = True
+
     mix_node = nodes.new(type='ShaderNodeMixRGB')
     mix_node.blend_type = 'COLOR'
     mix_node.inputs['Fac'].default_value = 1.0
+    mix_node.location = texture_pos_dict.get("Color", Vector((0,0)))
+    mix_node.hide = True
 
     material.node_tree.links.new(image_node.outputs[0], mix_node.inputs["Color1"])
         
@@ -154,6 +160,18 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
 
 
 
+texture_pos_dict = {}
+texture_pos_dict["Diffuse_map"] = Vector((-456.2249, -80.7665))
+texture_pos_dict["AO_map"] = Vector((-453.5826, -112.5437))
+texture_pos_dict["Specular_map"] = Vector((-452.2580, -152.2646))
+texture_pos_dict["Glossiness_map"] = Vector((-452.2579, -190.6617))
+texture_pos_dict["Cavity_map"] = Vector((-453.5802, -231.7069))
+texture_pos_dict["Normal_map"] = Vector((-452.1403, -283.6068))
+texture_pos_dict["Color"] = Vector((-174.5535, -564.0383))
+texture_pos_dict["Blank_Emission"] = Vector((-514.4103, -635.5396))
+texture_pos_dict["RGB"] = Vector((-460.1884, -716.3024))
+
+
 def FullTextureImport(tex_base_dir,material,self):
 
     material.use_nodes = True
@@ -198,7 +216,10 @@ def FullTextureImport(tex_base_dir,material,self):
                         
         image_node  = node_tree.nodes.new("ShaderNodeTexImage")
         image_node.image = bpy.data.images.load(tex_base_dir + "/" + file_name)
-                        
+
+        image_node.location = texture_pos_dict.get(file_name.split(".")[0], Vector((0,0)))
+        image_node.hide = True
+
         output_socket = image_node.outputs["Color"]
 
         try:
