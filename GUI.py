@@ -233,22 +233,65 @@ class SpawnGuns(bpy.types.Panel):
         self.generateGunButtons(box,"Volt","Gun_new")
         self.generateGunButtons(box,"R97","Gun_new")
         
-        '''
+        
         box = layout.box()
         box.label(text="LMG's")
         self.generateGunButtons(box,"Spitfire","Gun_new")
-        self.generateGunButtons(box,"Lstar","Gun_new")
+        
+        # L star custom code because its broken
+        col = box.column()
+        operation = col.operator(ModelImporter.Model_importer.bl_idname, text="Spawn Lstar (broken)", icon="CONSOLE")
+        operation.model_type = "Guns"
+        operation.model_name = "Lstar"
+        operation.model_subtype = "Gun_new"
 
+        self.generateGunButtons(box,"Devotion","Gun_new")
+
+        
         box = layout.box()
         box.label(text="Sniper's")
 
+        self.generateGunButtons(box,"Kraber","Gun_new")
+        self.generateGunButtons(box,"Double_Take","Gun_new")
+        self.generateGunButtons(box,"DMR","Gun_new")
 
+        
         box = layout.box()
         box.label(text="Shotgun's")
+        self.generateGunButtons(box,"EVA-8","Gun_new")
+        
+        # custom Mustiff code
+        col = box.column()
+        operation = col.operator(ModelImporter.Model_importer.bl_idname, text="Spawn Mastiff (broken)", icon="CONSOLE")
+        operation.model_type = "Guns"
+        operation.model_name = "Mastiff"
+        operation.model_subtype = "Gun_new"
+        
 
+        '''
         box = layout.box()
         box.label(text="Grenadier's")
+        self.generateGunButtons(box,"Sidewinder","Gun_new")
+        self.generateGunButtons(box,"EPG","Gun_new")
+        self.generateGunButtons(box,"Softball","Gun_new")
+        self.generateGunButtons(box,"Cold_war","Gun_new")
 
         box = layout.box()
         box.label(text="Pistol's")
+        self.generateGunButtons(box,"W-man_Elite","Gun_new")
+        self.generateGunButtons(box,"Mosambik","Gun_new")
+        self.generateGunButtons(box,"RE-45","Gun_new")
+        self.generateGunButtons(box,"P-2016","Gun_new")
+        self.generateGunButtons(box,"Wingman","Gun_new")
+
+        box = layout.box()
+        box.label(text="AT's")
+        self.generateGunButtons(box,"Charge_rfl","Gun_new")
+        self.generateGunButtons(box,"Mag","Gun_new")
+        self.generateGunButtons(box,"Thunderbold","Gun_new")
+        self.generateGunButtons(box,"Archer","Gun_new")
+
+        box = layout.box()
+        box.label(text="MSC")
+        self.generateGunButtons(box,"Pulse_Blade","Gun_new")
         '''
