@@ -1,0 +1,42 @@
+name: Create Release with Custom ZIP
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Create ZIP excluding Models folder
+      run: |
+        zip -r CodeOnly.zip . -x "Models/*" -x "Models"
+
+    - name: Upload release asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: CodeOnly.zip
+        asset_name: CodeOnly.zip
+        asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    
+    - name: model Only version
+      run: |
+        zip -r ModelsOnly.zip . -i "Models/*" -i "Models"
+    
+    - name: Upload release model asset
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ModelsOnly.zip
+        asset_name: ModelsOnly.zip
+        asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
