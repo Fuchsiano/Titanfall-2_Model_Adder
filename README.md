@@ -6,6 +6,14 @@ A Blender Addon to Import prepared Titanfall 2 Models in one click.
 > NOTE:
 > This add-on is still in development and not all models / features are done yet.
 
+## Table of Contents
+* [Featur List](##features)
+* [Install Guide](##installation)
+* [Usage Guide](##using-the-add-on)
+* [Update](##updating-the-addon)
+* [Developed by](##developed-by)
+* [Credits](##credits)
+
 
 ## Features
 - Import all Guns and Pilots in on click (Titans to be coming Soon TM)
@@ -19,6 +27,7 @@ first download Blender if you haven't already (supported version is 3.X)
 [Blender 3.6](https://www.blender.org/download/releases/3-6/)
 
 then pick a version from the release tab
+ (after picking a version, download the "Source code Zip" for first install) 
 
 [Titanfall 2 Model Adder version](https://github.com/Fuchsiano/Titanfall-2_Model_Adder/releases)
 
@@ -37,6 +46,23 @@ After creating a new .blend file  open the Properties Shelf (aka n-panel) by pre
 Now you only have to click on the model you want in you scene
 
 ![tool showoff](./Images/Model_Adder.gif)
+
+## Updating the Addon
+
+>steps not needed if you are ok with downloading the entire model library again after every update  
+
+When a new version is released there are two zips to chose from to update your addon version.
+if the code version was updated download the ``CodeOnly.zip`` if the model data was updated download the ``ModelsOnly.zip``
+
+Go to your blender addon path.
+you can get your path by going to ``Window>Toggle System Console`` and looking up the line ``"your version directory is:"``
+The following string will show you your addon Install directory
+
+The addon path should end with either a version number (for example ``Titanfall-2_Model_Adder-0_5_2``) or the branch name
+(``Titanfall-2_Model_Adder-Master``) these suffixes need to be removed, meaning you should change it to ``path/to/addon/Titanfall-2_Model_Adder``
+
+you can now unpack your ``CodeOnly.zip`` or ``ModelsOnly.zip`` and replace the files in the  ``Titanfall-2_Model_Adder``
+folder
 
 ## Developed by
 

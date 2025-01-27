@@ -51,7 +51,53 @@ class ModelRecolor(bpy.types.Operator):
                 self.recolor_obj(context,obj)
 
         return {"FINISHED"}
+    
 
+class KeyframeModelRecolor(bpy.types.Operator):
+    
+    bl_idname = "object.key_visor_recolor"
+    bl_label = "Recolors the selected Pilot visors at key"
+
+    def recolor_objAndKey(self,context,obj):
+        
+        tf_settings = context.scene.Titanfall_adder_settings
+        for material_slot in obj.material_slots:
+            material = material_slot.material
+
+            if not (("_b" in material.name and tf_settings.body_color) or ("_he" in material.name and tf_settings.helmet_color) or ("_j" in material.name and tf_settings.jumpkit_color)):
+                continue
+
+            if not material.use_nodes:
+                print("Tried to recolor material without nodes. Trying next material")
+                continue
+
+            node_tree = material.node_tree
+
+            color_rgb_node = None
+
+            for node in node_tree.nodes:
+                if node.name.startswith("RGB"):
+                    color_rgb_node = node
+                    break
+
+            if not color_rgb_node:
+                print("Node not found in " + material.name)
+                continue
+
+            if (("_b" in material.name and tf_settings.body_color) or ("_he" in material.name and tf_settings.helmet_color) or ("_j" in material.name and tf_settings.jumpkit_color)):
+                color_rgb_node.outputs[0].default_value = tf_settings.light_color
+                color_rgb_node.outputs[0].keyframe_insert(data_path="default_value", frame = context.scene.frame_current)
+    
+    def execute(self, context):
+
+        for obj in bpy.context.selected_objects:
+            if obj.type == "ARMATURE":
+                for child in obj.children:
+                    self.recolor_objAndKey(context,child)
+            else:
+                self.recolor_objAndKey(context,obj)
+
+        return {"FINISHED"}
 
 class UnlinkMaterial(bpy.types.Operator):
     """Create a new Set of Materials for all Selected Objects"""
@@ -178,9 +224,22 @@ class GetObjectWith(bpy.types.Operator):
 
         return {"FINISHED"}
 
+class SetBackgroundTransparent(bpy.types.Operator):
+    """Set Film to Transparent"""
+    bl_idname = "object.set_film_transparent"
+    bl_label = "Set Film Transparent"
+    bl_options = {'REGISTER', 'UNDO'}
+    
+    def execute(self, context):
+        context.scene.render.film_transparent = True
+        self.report({'INFO'}, "Film set to Transparent!")
+        return {'FINISHED'}
 
 global version_string
 version_string = ""
+
+global model_version_string
+model_version_string = ""
 
 global node_tree_appended
 node_tree_appended = False
@@ -305,4 +364,82 @@ class GunSetOrigin(bpy.types.Operator):
             obj.location = origin_backup                
         
         return {'FINISHED'}
+
+
+
+class NewArmature(bpy.types.Operator):
+    """Create a new Armature for the selected Pilots"""
+    
+    bl_idname = "object.pilot_new_armature"
+    bl_label = "Create a new Armature for the selected Pilots"
+
+    def traverse_bones(self, old_armature, new_armature, bone,boneParent = None, level=0):
+        print("  " * level + f"Bone: {bone.name}")
         
+        # Create a new bone in the new armature
+        new_bone = new_armature.edit_bones.new(bone.name)
+        
+        if boneParent:
+            new_bone.head = boneParent.tail
+        else:
+            #its a backup
+            new_bone.head = bone.head_local
+
+        new_bone.tail = bone.tail_local
+        
+        # Set the parent bone
+        if bone.parent:
+            new_bone.parent = new_armature.edit_bones[bone.parent.name]
+            new_bone.use_connect = True
+        
+        # Check if the bone has children
+        if bone.children:
+            for child in bone.children:
+                self.traverse_bones(old_armature, new_armature, child, boneParent= bone, level = level + 1)
+        else:
+            print(f"{bone.name} has no children")
+            # If no children, create a continuation bone
+            direction = (bone.tail_local - bone.head_local).normalized()
+            new_bone.tail = bone.tail_local + direction * (bone.length / 4)
+    
+    def execute(self, context):
+        for obj in context.selected_objects:
+            if obj.type != "ARMATURE" and not "Guns" in obj.name: 
+                continue
+            
+            old_armature = obj
+            head_bone = old_armature.pose.bones["jx_c_delta"]
+            
+            # Create a new armature
+            bpy.ops.object.armature_add()
+            new_armature_obj = bpy.context.object
+            new_armature_obj.show_in_front  = True
+
+            new_armature = new_armature_obj.data
+            
+            # Switch to Edit mode
+            bpy.context.view_layer.objects.active = new_armature_obj
+            new_armature.display_type = "STICK"
+            bpy.ops.object.mode_set(mode='EDIT')
+            new_armature.edit_bones.remove(new_armature.edit_bones['Bone'])
+            # Traverse and create bones
+            self.traverse_bones(old_armature, new_armature, head_bone.bone, 0)
+            
+            # Return to Object mode
+            bpy.ops.object.mode_set(mode='OBJECT')
+            
+            # Parent objects to the new armature
+            for child in old_armature.children:
+                child.parent = new_armature_obj
+
+            # Store the old armature's name
+            old_armature_name = old_armature.name
+
+            # Delete the old armature
+            bpy.data.objects.remove(old_armature, do_unlink=True)
+
+            # Rename the new armature to the old armature's name
+            new_armature_obj.name = old_armature_name
+
+        
+        return {'FINISHED'}

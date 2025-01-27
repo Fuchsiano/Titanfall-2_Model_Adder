@@ -211,7 +211,7 @@ def FullTextureImport(tex_base_dir,material,self):
                         
         #Filter files I cant deal with
         if file_name.startswith("0x") or not file_name.endswith(".png"):
-            print("useless file found " + file_name +" !")
+            print("useless file found " + file_name +" ! \n")
             continue
                         
         image_node  = node_tree.nodes.new("ShaderNodeTexImage")
@@ -296,7 +296,7 @@ class Model_importer(bpy.types.Operator):
         qc_file_path = next((os.path.join(directory_to_subtype, file) for file in os.listdir(directory_to_subtype) if file.endswith(file_type)),None)
         
         if not qc_file_path:
-            print("qc File not found");
+            print("qc File not found in path: " + directory_to_subtype);
             return {'CANCELLED'}
 
 
@@ -397,6 +397,7 @@ class Model_ReTexture(bpy.types.Operator):
 
         for obj in context.selected_objects:
             if obj.type == 'ARMATURE':
+                print("_________________________________________________________________")
                 print("currently re-importing " + obj.name + " ...")
                 model_type = obj.name.split("/")[0]
                 model_name = obj.name.split("/")[1]
@@ -407,7 +408,7 @@ class Model_ReTexture(bpy.types.Operator):
                         FullTextureImport(textureDir,material_slot.material,self)
         
         if model_type == "":
-            self.report({"ERROR"}, "was not able to find / get name from armature. Its was either renamed or not selected.")
+            self.report({"ERROR"}, "was not able to find / get any names from armatures. Its was either renamed or not selected.")
             return {'CANCELLED'}
     
         print("done!")

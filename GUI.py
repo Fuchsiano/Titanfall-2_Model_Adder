@@ -3,11 +3,11 @@ import bpy
 from. import ModelImporter , Utils , AddonSettings
 
 class MainPanel(bpy.types.Panel):
-    bl_label = "Interstellar Library"
+    bl_label = "Titanfall 2 Library"
     bl_idname = "OBJECT_PT_MainPanel"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
-    bl_category = "Interstellar Library"
+    bl_category = "Titanfall 2 Library"
 
     
     
@@ -33,8 +33,11 @@ class MainPanel(bpy.types.Panel):
 
         
         row = layout.row()
-        row.label(text="Version: " + Utils.version_string)
+        row.label(text="Code Version: " + Utils.version_string)
         
+        row = layout.row()
+        row.label(text="Model Version: " + Utils.model_version_string)
+
         tf_settings = context.scene.Titanfall_adder_settings
         
 
@@ -47,7 +50,9 @@ class MainPanel(bpy.types.Panel):
         row = box.row()
         row.separator()
         
-        box.prop(tf_settings, "light_color", text="Pilot Color")
+        row.prop(tf_settings, "light_color", text="Pilot Color")
+        row.operator(Utils.KeyframeModelRecolor.bl_idname, text="", icon= "KEYFRAME")
+
         box.prop(tf_settings,"helmet_color")
         box.prop(tf_settings,"body_color")
         box.prop(tf_settings,"jumpkit_color")
@@ -82,7 +87,13 @@ class MainPanel(bpy.types.Panel):
         row.operator(Utils.AddToHand.bl_idname, text="Add to hand", icon="CON_ARMATURE")
         
         row = box.row()
-        row.operator(Utils.GunSetOrigin.bl_idname, text="gun set origin", icon="DECORATE_KEYFRAME")
+        row.operator(Utils.GunSetOrigin.bl_idname, text="Gun set origin", icon="DECORATE_KEYFRAME")
+
+        #row = box.row()
+        #row.operator(Utils.NewArmature.bl_idname, text="Generate new armature", icon="DECORATE_KEYFRAME")
+
+        row = box.row()
+        row.operator(Utils.SetBackgroundTransparent.bl_idname, text= "Make background transparent", icon = "MESH_GRID")
 
 ##########################################################################################################################
 class PerformanceSettings(bpy.types.Panel):
@@ -295,3 +306,37 @@ class SpawnGuns(bpy.types.Panel):
         box.label(text="MSC")
         self.generateGunButtons(box,"Pulse_Blade","Gun_new")
         '''
+
+class SpawnMisc(bpy.types.Panel):
+    bl_label = "Spawn Misc"
+    bl_idname = "OBJECT_PT_SpawnMisc"
+    bl_space_type = "VIEW_3D"
+    bl_region_type = "UI"
+    bl_category = "Interstellar Library"
+    bl_parent_id = "OBJECT_PT_MainPanel"
+    bl_options = {"DEFAULT_CLOSED"}
+    
+    @classmethod
+    def poll(self, context):
+        return  Utils.node_tree_name in bpy.data.node_groups
+    
+    def generateMiscButton(self,box_ui,model):
+        
+        col = box_ui.column()
+        operation = col.operator(ModelImporter.Model_importer.bl_idname, text="Spawn "+model, icon="CONSOLE")
+        operation.model_type = "Misc"
+        operation.model_name = model
+        operation.model_subtype = "Model" 
+
+    def draw(self, context):
+        layout = self.layout
+        
+        
+        row = layout.row()
+        row.label(text="Spawn Misc")
+        
+        row = layout.row()
+        self.generateMiscButton(row,"Grenade")
+        
+        row = layout.row()
+        self.generateMiscButton(row,"IMC_Dropship")
