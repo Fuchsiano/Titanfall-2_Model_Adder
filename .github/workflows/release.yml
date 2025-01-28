@@ -2,7 +2,9 @@ name: Create Release with Custom ZIP
 
 on:
   release:
-    types: [created]
+    types: [published]
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -10,7 +12,9 @@ jobs:
 
     steps:
     - name: Checkout code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
+      with :
+        fetch-depth: 0
 
     - name: Create ZIP excluding Models folder
       run: |
@@ -40,3 +44,105 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+    - name: Create Zip Archive changes only
+      id: zip_changed_files
+      run: |
+
+        # Fetch the current tag from the release event
+        current_tag="${{ github.event.release.tag_name }}"
+        echo "Current Tag: $current_tag"
+
+        # Ensure tags are fetched and identify the previous tag
+        git fetch --tags
+        last_tag=$(git describe --tags --abbrev=0 --exclude="$current_tag" 2>/dev/null || echo "")
+
+        if [ -z "$last_tag" ]; then
+          echo "No previous tag found. Creating zip for all repository files."
+          changed_files=$(git ls-tree -r $current_tag --name-only)
+        else
+          echo "Last Tag: $last_tag"
+          echo "Changed files since $last_tag:"
+          changed_files=$(git diff --name-only $last_tag $current_tag)
+        fi
+
+        # Log changed files
+        echo "$changed_files"
+
+        # Create the zip archive
+        zip -r changed_files.zip $changed_files
+        echo "Zip archive created: changed_files.zip"
+
+    
+    - name: Upload Changes Only
+      uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: changed_files.zip
+        asset_name: ChangesOnly.zip
+        asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
+    - name: Update Release Notes
+      uses: actions/github-script@v4
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          const fs = require('fs');
+          const ModelLibPath = './Models/Model_lib_Version.txt';
+          const CodelLibPath = './__init__.py';
+          console.log("At Func def");
+
+          async function updateRelease() {
+            try {
+              // Read version from __init__.py
+              const fileContent = fs.readFileSync(CodelLibPath, 'utf-8');
+              const versionMatch = fileContent.match(/"version": \((\d+),\s*(\d+),\s*(\d+)\)/);
+              if (!versionMatch) {
+                throw new Error("Version information not found in __init__.py");
+              }
+              const version = `${versionMatch[1]}.${versionMatch[2]}.${versionMatch[3]}`;
+              
+              // Get the tag name from context
+              const tag = context.ref.replace('refs/tags/', ''); 
+
+              console.log("tags " + tag);
+
+              // Get release info from GitHub
+              const release = await github.repos.getReleaseByTag({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                tag: tag
+              });
+              
+              console.log("Get release info from GitHub");
+
+              // Read current release body
+              const currentBody = release.data.body || '';
+
+              // Read Model library version and append to the release notes
+              const modelLibVersion = fs.readFileSync(ModelLibPath, 'utf8');
+              const additionalText = `\n\nCurrent Model lib version: ${modelLibVersion}\nCurrent Code version: ${version}`;
+              const updatedBody = currentBody + additionalText;
+              
+              console.log("Update the release with the new body");
+
+              // Update the release with the new body
+              await github.repos.updateRelease({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                release_id: release.data.id,
+                body: updatedBody
+              });
+
+              console.log('Updated release notes successfully.');
+            } catch (error) {
+              console.error('Error updating release notes:', error);
+            }
+          }
+
+          // Call the update function
+          updateRelease();
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
