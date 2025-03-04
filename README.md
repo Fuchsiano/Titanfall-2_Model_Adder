@@ -7,12 +7,12 @@ A Blender Addon to Import prepared Titanfall 2 Models in one click.
 > This add-on is still in development and not all models / features are done yet.
 
 ## Table of Contents
-* [Featur List](##features)
-* [Install Guide](##installation)
-* [Usage Guide](##using-the-add-on)
-* [Update](##updating-the-addon)
-* [Developed by](##developed-by)
-* [Credits](##credits)
+* [Featur List](#features)
+* [Install Guide](#installation)
+* [Usage Guide](#using-the-add-on)
+* [Update](#updating-the-addon)
+* [Developed by](#developed-by)
+* [Credits](#credits)
 
 
 ## Features
@@ -46,6 +46,10 @@ After creating a new .blend file  open the Properties Shelf (aka n-panel) by pre
 Now you only have to click on the model you want in you scene
 
 ![tool showoff](./Images/Model_Adder.gif)
+
+NEW add to hand feature!!
+
+![Add to hand showoff](./Images/AddToHand.gif)
 
 ## Updating the Addon
 
