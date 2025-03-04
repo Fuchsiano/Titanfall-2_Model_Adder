@@ -48,8 +48,7 @@ Now you only have to click on the model you want in you scene
 ![tool showoff](./Images/Model_Adder.gif)
 
 NEW add to hand feature!!
-
-![Add to hand showoff](./Images/AddToHand.gif)
+<img src="./Images/AddToHand.gif" width="600" height="338"/>
 
 ## Updating the Addon
 
