@@ -22,18 +22,18 @@ A Blender Addon to Import prepared Titanfall 2 Models in one click.
 
 ## Installation
 
-first download Blender if you haven't already (supported version is 3.X)
+first download Blender if you haven't already
 
-[Blender 3.6](https://www.blender.org/download/releases/3-6/)
+[Blender](https://www.blender.org/download/)
 
 then pick a version from the release tab
  (after picking a version, download the "Source code Zip" for first install) 
 
 [Titanfall 2 Model Adder version](https://github.com/Fuchsiano/Titanfall-2_Model_Adder/releases)
 
-and a Blender add-on by Artfunkel (latest version 3.3 is currently not working but 3.2.6 works)
+and a Blender add-on by Artfunkel
 
-[Blender Source tool download](http://steamreview.org/BlenderSourceTools/archives/)
+[Blender Source tool download](http://steamreview.org/BlenderSourceTools/)
 
 after installing the two add-ons as zip (don't unpack) you need to add both of them to Blender by going to  
 
@@ -48,7 +48,9 @@ Now you only have to click on the model you want in you scene
 ![tool showoff](./Images/Model_Adder.gif)
 
 NEW add to hand feature!!
+
 <img src="./Images/AddToHand.gif" width="600" height="338"/>
+
 
 ## Updating the Addon
 
@@ -83,4 +85,3 @@ or
 [This cool Video by EyelessRook](https://youtu.be/CeO1w9Qe6MY?si=QOaywmcXoPgW1i9T)
 
 When Creating this Add-on we basically did  the same and packed the resulting files in the Model folder to be used by this add-on.
-

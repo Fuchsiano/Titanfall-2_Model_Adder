@@ -3,6 +3,8 @@ from mathutils import Euler
 import math
 from bpy.types import Context
 
+from . import AddonSettings
+
 ##############Texture operation
 
 class ModelRecolor(bpy.types.Operator):
@@ -235,6 +237,18 @@ class SetBackgroundTransparent(bpy.types.Operator):
         self.report({'INFO'}, "Film set to Transparent!")
         return {'FINISHED'}
 
+class ResetImportScale(bpy.types.Operator):
+    """Reset the import scale to default"""
+    bl_idname = "object.reset_import_scale"
+    bl_label = "Reset Import Scale"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        tf_settings = bpy.context.scene.Titanfall_adder_settings
+        print(tf_settings.import_scale)
+        tf_settings.import_scale = (0.025352,0.025352,0.025352)
+        return {'FINISHED'}
+
 global version_string
 version_string = ""
 
@@ -271,6 +285,7 @@ class SG_Blender_importer(bpy.types.Operator):
             data_to,
         ):
             data_to.node_groups = [node_tree_name]
+            
         if node_tree_name in bpy.data.node_groups:
             appended_node_tree = bpy.data.node_groups[node_tree_name]
             print("Appendet Node Tree!")

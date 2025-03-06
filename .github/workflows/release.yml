@@ -18,7 +18,10 @@ jobs:
 
     - name: Create ZIP excluding Models folder
       run: |
-        zip -r CodeOnly.zip . -x "Models/*" -x "Models"
+          zip -r CodeOnly.zip . \
+          -x "Models/*" "Models" \
+          -x ".git/*" ".git" \
+          -x ".github/*" ".github"
 
     - name: Upload release asset
       uses: actions/upload-release-asset@v1

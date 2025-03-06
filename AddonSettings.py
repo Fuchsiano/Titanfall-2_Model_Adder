@@ -25,3 +25,5 @@ class TitanfallAdderSettings(bpy.types.PropertyGroup):
     light_color: bpy.props.FloatVectorProperty(name="Color",subtype='COLOR',default=(1.0, 1.0, 1.0, 1.0),size=4,min=0.0, max=1.0,description="Light Colors")
 
     weapon_Origin : bpy.props.BoolProperty(name="Set New origin", default = True)
+
+    import_scale: bpy.props.FloatVectorProperty(name="Color",subtype='XYZ',default=(0.025352, 0.025352, 0.025352),size=3,min=0.0, max=10.0,description="Scale On Import",precision=6)

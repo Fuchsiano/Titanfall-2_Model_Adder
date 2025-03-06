@@ -18,6 +18,14 @@ class MainPanel(bpy.types.Panel):
 
         if Utils.node_tree_name in bpy.data.node_groups:
             node_tree_appendet = True
+
+        if "io_scene_valvesource" not in bpy.context.preferences.addons:
+            row = layout.row()
+            row.label(text="Blender Source Tool not found!", icon='ERROR')
+            row = layout.row()
+            row.label(text="do you need to download it or add it as an addon ?")
+
+            return
         
         if not node_tree_appendet:
             
@@ -147,7 +155,10 @@ class PerformanceSettings(bpy.types.Panel):
 
         row = layout.row()
         row.prop(tf_settings,"weapon_Origin", text= "set new origin on import")
-
+        
+        row = layout.row()
+        row.prop(tf_settings,"import_scale", text="import scale")
+        row.operator(Utils.ResetImportScale.bl_idname,text="", icon="TRACKING_BACKWARDS")
 
 ##########################################################################################################################
 class SpawnPilots(bpy.types.Panel):

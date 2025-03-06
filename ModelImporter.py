@@ -93,7 +93,13 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
         #--------------------------------------------------------        
         # Rotation && scale
         #--------------------------------------------------------
-        defaultScaleFactor = (0.01, 0.01, 0.01)
+
+        # Scale the object to 0.01 on all axes
+        #TODO: tried using 0.025352 because the scaling is scuffed in newer Blender source tool version. Working on fix
+        # Used to be this scale but something broke while upgrading to the new blender version :/ 
+
+        #defaultScaleFactor = (0.01, 0.01, 0.01)
+        defaultScaleFactor = tf_settings.import_scale
         
         if model_subtype == "Gun_new":
             bone_names_to_keep = ["muzzle_flash","shell", "Def_c_magazine", "def_c_proscreen", "ja_ads_attachment", "def_c_bolt", "def_c_sight_on", "ja_c_propGun", "weapon_bone"]
@@ -126,9 +132,7 @@ def CleanModelAfterImport(model_type,model_name,model_subtype):
                     obj.location = bpy.context.scene.cursor.location
                     obj.rotation_euler = (math.radians(90.0), math.radians(0.0), math.radians(0.0))
                     
-                    # Scale the object to 0.01 on all axes
-                    #TODO: tried using 0.025352 because the scaling is scuffed in newer Blender source tool version. Working on fix
-                    # Used to be this scale but something broke while upgrading to the new blender version :/ 
+
                     obj.scale = defaultScaleFactor
                     bpy.ops.object.transform_apply(scale=True,rotation=True)
                     obj.name = model_type + "/" + model_name + "/" + model_subtype
