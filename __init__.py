@@ -32,6 +32,7 @@ RegisterClasses = [
     Utils.NewArmature,
     Utils.KeyframeModelRecolor,
     Utils.SetBackgroundTransparent,
+    Utils.ResetImportScale,
 
     GUI.MainPanel,
     GUI.SpawnPilots,
@@ -58,7 +59,7 @@ def get_highest_version(directory):
             if highest_version is None or version_tuple > highest_version:
                 highest_version = version_tuple
                 highest_version_str = item
-    return f"Titanfall-2_Model_Adder-{highest_version_str}" if highest_version_str else None
+    return f"Titanfall-2_Model_Adder-{highest_version_str}" if highest_version_str else "Titanfall-2_Model_Adder"
 
 ##########################################################################################################################
 def register():
@@ -89,7 +90,7 @@ def register():
         print("found link for version " + Utils.version_string)
         success = True
     
-    elif any(d.startswith("Titanfall-2_Model_Adder") for d in os.listdir(bpy.utils.user_resource('SCRIPTS') + r"/addons/")):
+    elif any(d.startswith("Titanfall-2_Model_Adder-") for d in os.listdir(bpy.utils.user_resource('SCRIPTS') + r"/addons/")):
         Utils.addon_core_path = bpy.utils.user_resource('SCRIPTS') + "/addons/" + get_highest_version(bpy.utils.user_resource('SCRIPTS') + r"/addons/");
         Utils.addon_base_path =  Utils.addon_core_path + r"/Models/"
         print("found non native version at " + Utils.addon_core_path)
